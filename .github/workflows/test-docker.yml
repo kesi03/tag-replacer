@@ -11,7 +11,7 @@ jobs:
       tag-replacer:
         image: mockholm/tag-replacer
         options: >-
-          --entrypoint ""
+          --entrypoint "bash"
         volumes:
           - ${{ github.workspace }}:/work  # Mount the GitHub workspace to /work in the container
 
