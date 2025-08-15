@@ -17,6 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Is container running?
+        run: |
+          docker ps
+
       - name: Create input file
         run: |
           echo "Hello, my name is {{name}} and I am {{age}} years old." > input.txt
