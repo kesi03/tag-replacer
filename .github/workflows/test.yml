@@ -60,11 +60,12 @@ jobs:
 
       - name: "Example 5: Using Environment Variables"
         run: |
-          python tag-replacer.py --replacer "NAME,AGE" --type environment --in input.txt --out output.txt
+          echo "Hello, my name is {{NAME}} and I am {{AGE}} years old." > input-custom-tag.txt
+          python tag-replacer.py --replacer "NAME,AGE" --type environment --in input-custom-tag.txt --out output.txt
           cat output.txt
 
       - name: "Example 6: Custom Start and End Tags"
         run: |
-          echo "Hello, my name is [[name]] and I am [[age]] years old." > input2.txt
-          python tag-replacer.py --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input2.txt --out output.txt --start_tag "[[" --end_tag "]]"
+          echo "Hello, my name is [[name]] and I am [[age]] years old." > input-custom-tag.txt
+          python tag-replacer.py --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input-custom-tag.txt --out output.txt --start_tag "[[" --end_tag "]]"
           cat output.txt
