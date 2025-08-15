@@ -37,8 +37,10 @@ def load_replacer(replacer, replacer_type, format_type):
         except Exception as e:
             print(f"Error decoding string: {e}")
             return None
+    elif replacer_type == 'environment':
+        return load_environment(replacer)
     else:
-        print("Invalid replacer type. Use 'string' or 'file'.")
+        print("Invalid replacer type. Use 'string', 'file', or 'environment'.")
         return None
 
 def load_csv(replacer):
@@ -62,7 +64,17 @@ def load_csv_from_string(replacer):
         print(f"Error reading CSV string: {e}")
     return replacer_data
 
-def replace_tags(replacer, replacer_type, format_type, infile, outfile, start_tag, end_tag):
+def load_environment(replacer):
+    replacer_data = {"replace": []}
+    for key in replacer.split(','):
+        value = os.getenv(key.strip())
+        if value is not None:
+            replacer_data["replace"].append({"key": key.strip(), "value": value})
+        else:
+            print(f"Warning: Environment variable '{key.strip()}' not found.")
+    return replacer_data
+
+def replace_tags(replacer, replacer_type, format_type, infile, outfile):
     # Load the replacer data
     replacer_data = load_replacer(replacer, replacer_type, format_type)
     if replacer_data is None:
@@ -80,7 +92,7 @@ def replace_tags(replacer, replacer_type, format_type, infile, outfile, start_ta
     for item in replacer_data.get("replace", []):
         key = item.get("key", "")
         value = item.get("value", "")
-        content = content.replace(f"{start_tag}{key}{end_tag}", value)
+        content = content.replace(f"{{{{{key}}}}}", value)
 
     # Write the modified content to the output file
     try:
@@ -90,17 +102,14 @@ def replace_tags(replacer, replacer_type, format_type, infile, outfile, start_ta
         print(f"Error writing to output file: {e}")
 
 if __name__ == "__main__":
-   if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Replace tags in a file based on a JSON, CSV, YAML, or environment replacer.")
     parser.add_argument("--replacer", required=True, help="Replacer JSON string, CSV file path, YAML file path, or comma-separated environment variable keys")
     parser.add_argument("--type", choices=['string', 'file', 'environment'], default='string', help="Specify if replacer is a 'string', 'file', or 'environment'")
     parser.add_argument("--format", choices=['json', 'yaml', 'csv'], default='json', help="Format of the replacer if it's a string")
     parser.add_argument("--in", dest="infile", required=True, help="Input file path")
     parser.add_argument("--out", dest="outfile", required=True, help="Output file path")
-    parser.add_argument("--start_tag", default="{{", help="Start tag for placeholders (default: '{{')")
-    parser.add_argument("--end_tag", default="}}", help="End tag for placeholders (default: '}}')")
 
     args = parser.parse_args()
 
-    replace_tags(args.replacer, args.type, args.format, args.infile, args.outfile, args.start_tag, args.end_tag)
+    replace_tags(args.replacer, args.type, args.format, args.infile, args.outfile)
 
