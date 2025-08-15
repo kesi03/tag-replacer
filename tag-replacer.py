@@ -5,7 +5,17 @@ import csv
 import yaml
 
 def load_replacer(replacer, replacer_type, format_type):
-    # Load replacer based on type
+    """
+    Load the replacer data based on the specified type.
+
+    Args:
+        replacer (str): The replacer JSON string, file path, or environment variable keys.
+        replacer_type (str): The type of replacer ('string', 'file', or 'environment').
+        format_type (str): The format of the replacer if it's a string ('json', 'yaml', or 'csv').
+
+    Returns:
+        dict: A dictionary containing the keys and values for replacement.
+    """
     if replacer_type == 'file':
         file_extension = os.path.splitext(replacer)[1].lower()
         try:
@@ -44,6 +54,15 @@ def load_replacer(replacer, replacer_type, format_type):
         return None
 
 def load_csv(replacer):
+    """
+    Load the replacer data from a CSV file.
+
+    Args:
+        replacer (str): The path to the CSV file.
+
+    Returns:
+        dict: A dictionary containing the keys and values for replacement.
+    """
     replacer_data = {"replace": []}
     try:
         with open(replacer, 'r') as f:
@@ -55,6 +74,15 @@ def load_csv(replacer):
     return replacer_data
 
 def load_csv_from_string(replacer):
+    """
+    Load the replacer data from a CSV string.
+
+    Args:
+        replacer (str): The CSV string.
+
+    Returns:
+        dict: A dictionary containing the keys and values for replacement.
+    """
     replacer_data = {"replace": []}
     try:
         reader = csv.DictReader(replacer.splitlines())
@@ -65,6 +93,15 @@ def load_csv_from_string(replacer):
     return replacer_data
 
 def load_environment(replacer):
+    """
+    Load the replacer data from environment variables.
+
+    Args:
+        replacer (str): A comma-separated string of environment variable keys.
+
+    Returns:
+        dict: A dictionary containing the keys and values for replacement.
+    """
     replacer_data = {"replace": []}
     for key in replacer.split(','):
         value = os.getenv(key.strip())
@@ -73,8 +110,19 @@ def load_environment(replacer):
         else:
             print(f"Warning: Environment variable '{key.strip()}' not found.")
     return replacer_data
+def replace_tags(replacer, replacer_type, format_type, infile, outfile, start_tag, end_tag):
+    """
+    Replace tags in the input file based on the replacer data.
 
-def replace_tags(replacer, replacer_type, format_type, infile, outfile):
+    Args:
+        replacer (str): The replacer JSON string, file path, or environment variable keys.
+        replacer_type (str): The type of replacer ('string', 'file', or 'environment').
+        format_type (str): The format of the replacer if it's a string ('json', 'yaml', or 'csv').
+        infile (str): The path to the input file containing placeholders.
+        outfile (str): The path to the output file where modified content will be saved.
+        start_tag (str): The start tag for placeholders.
+        end_tag (str): The end tag for placeholders.
+    """
     # Load the replacer data
     replacer_data = load_replacer(replacer, replacer_type, format_type)
     if replacer_data is None:
@@ -92,7 +140,7 @@ def replace_tags(replacer, replacer_type, format_type, infile, outfile):
     for item in replacer_data.get("replace", []):
         key = item.get("key", "")
         value = item.get("value", "")
-        content = content.replace(f"{{{{{key}}}}}", value)
+        content = content.replace(f"{start_tag}{key}{end_tag}", value)
 
     # Write the modified content to the output file
     try:
@@ -108,8 +156,9 @@ if __name__ == "__main__":
     parser.add_argument("--format", choices=['json', 'yaml', 'csv'], default='json', help="Format of the replacer if it's a string")
     parser.add_argument("--in", dest="infile", required=True, help="Input file path")
     parser.add_argument("--out", dest="outfile", required=True, help="Output file path")
+    parser.add_argument("--start_tag", default="{{", help="Start tag for placeholders (default: '{{')")
+    parser.add_argument("--end_tag", default="}}", help="End tag for placeholders (default: '}}')")
 
     args = parser.parse_args()
 
-    replace_tags(args.replacer, args.type, args.format, args.infile, args.outfile)
-
+    replace_tags(args.replacer, args.type, args.format, args.infile, args.outfile, args.start_tag, args.end_tag)
