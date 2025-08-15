@@ -1,4 +1,4 @@
-name: Tag Replacer Script Examples
+name: Tag Replacer Docker Tests
 
 on:
   workflow_dispatch:
@@ -10,6 +10,10 @@ jobs:
     services:
       tag-replacer:
         image: mockholm/tag-replacer
+        options: >-
+          --entrypoint ""
+        volumes:
+          - ${{ github.workspace }}:/work  # Mount the GitHub workspace to /work in the container
 
     steps:
       - name: Checkout code
@@ -21,13 +25,13 @@ jobs:
 
       - name: "Example 1: Using a JSON String"
         run: |
-          docker run --rm -v ${{ github.workspace }}:/work --network host mockholm/tag-replacer --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in /work/input.txt --out /work/output.txt
+          docker exec -i $(docker ps -q --filter "ancestor=mockholm/tag-replacer") bash -c "python replace-tag.py --replacer '{\"replace\":[{\"key\":\"name\",\"value\":\"John Doe\"},{\"key\":\"age\",\"value\":\"30\"}]}' --type string --format json --in /work/input.txt --out /work/output.txt"
           cat output.txt
 
       - name: "Example 2: Using a JSON File"
         run: |
           echo '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' > replacer.json
-          docker run --rm -v ${{ github.workspace }}:/work --network host mockholm/tag-replacer --replacer /work/replacer.json --type file --in /work/input.txt --out /work/output.txt
+          docker exec -i $(docker ps -q --filter "ancestor=mockholm/tag-replacer") bash -c "python replace-tag.py --replacer /work/replacer.json --type file --in /work/input.txt --out /work/output.txt"
           cat output.txt
 
       - name: "Example 3: Using a CSV File"
@@ -35,7 +39,7 @@ jobs:
           echo "key,value" > replacer.csv
           echo "name,John Doe" >> replacer.csv
           echo "age,30" >> replacer.csv
-          docker run --rm -v ${{ github.workspace }}:/work --network host mockholm/tag-replacer --replacer /work/replacer.csv --type file --in /work/input.txt --out /work/output.txt
+          docker exec -i $(docker ps -q --filter "ancestor=mockholm/tag-replacer") bash -c "python replace-tag.py --replacer /work/replacer.csv --type file --in /work/input.txt --out /work/output.txt"
           cat output.txt
 
       - name: "Example 4: Using a YAML File"
@@ -45,7 +49,7 @@ jobs:
           echo "    value: John Doe" >> replacer.yaml
           echo "  - key: age" >> replacer.yaml
           echo "    value: '30'" >> replacer.yaml
-          docker run --rm -v ${{ github.workspace }}:/work --network host mockholm/tag-replacer --replacer /work/replacer.yaml --type file --in /work/input.txt --out /work/output.txt
+          docker exec -i $(docker ps -q --filter "ancestor=mockholm/tag-replacer") bash -c "python replace-tag.py --replacer /work/replacer.yaml --type file --in /work/input.txt --out /work/output.txt"
           cat output.txt
 
       - name: "Example 5: Using Environment Variables - setting variables"
@@ -56,11 +60,11 @@ jobs:
       - name: "Example 5: Using Environment Variables"
         run: |
           echo "Hello, my name is {{NAME}} and I am {{AGE}} years old." > input-env.txt
-          docker run --rm -v ${{ github.workspace }}:/work -e NAME="${{ env.NAME }}" -e AGE="${{ env.AGE }}" --network host mockholm/tag-replacer --replacer "NAME,AGE" --type environment --in /work/input-env.txt --out /work/output.txt
+          docker exec -i -e NAME="${{ env.NAME }}" -e AGE="${{ env.AGE }}" $(docker ps -q --filter "ancestor=mockholm/tag-replacer") bash -c "python replace-tag.py --replacer 'NAME,AGE' --type environment --in /work/input-env.txt --out /work/output.txt"
           cat output.txt
 
       - name: "Example 6: Custom Start and End Tags"
         run: |
           echo "Hello, my name is [[name]] and I am [[age]] years old." > input-custom-tag.txt
-          docker run --rm -v ${{ github.workspace }}:/work --network host mockholm/tag-replacer --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in /work/input-custom-tag.txt --out /work/output.txt --start_tag "[[" --end_tag "]]"
+          docker exec -i $(docker ps -q --filter "ancestor=mockholm/tag-replacer") bash -c "python replace-tag.py --replacer '{\"replace\":[{\"key\":\"name\",\"value\":\"John Doe\"},{\"key\":\"age\",\"value\":\"30\"}]}' --type string --format json --in /work/input-custom-tag.txt --out /work/output.txt --start_tag '[[' --end_tag ']]'"
           cat output.txt

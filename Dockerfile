@@ -12,6 +12,3 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the Python file into the container
 COPY tag-replacer.py .
-
-# Command to run the Python script
-CMD ["python", "tag-replacer.py"]
