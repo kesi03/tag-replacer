@@ -53,10 +53,13 @@ jobs:
           python tag-replacer.py --replacer replacer.yaml --type file --in input.txt --out output.txt
           cat output.txt
 
-      - name: "Example 5: Using Environment Variables"
+      - name: "Example 5: Using Environment Variables -setting variables"
         run: |
           echo "NAME=John Doe" >> $GITHUB_ENV
           echo "AGE=30" >> $GITHUB_ENV
+
+      - name: "Example 5: Using Environment Variables"
+        run: |
           python tag-replacer.py --replacer "NAME,AGE" --type environment --in input.txt --out output.txt
           cat output.txt
 
