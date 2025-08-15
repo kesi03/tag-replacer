@@ -10,8 +10,6 @@ jobs:
     services:
       tag-replacer:
         image: mockholm/tag-replacer
-        options: >-
-          --entrypoint ""
         volumes:
           - ${{ github.workspace }}:/work  # Mount the GitHub workspace to /work in the container
 
