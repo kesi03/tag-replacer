@@ -20,9 +20,14 @@ jobs:
           go-version: '1.21'
 
       - name: Build binary
+        working-directory: apps/tag-replacer-go  
         run: |
-          cd apps/tag-replacer-go
-          go build -o tag-replacer-linux .
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go mod tidy
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o tag-replacer-linux .
+          CHMOD +x tag-replacer-linux
+
+      - name: List files
+        run: ls -la ./apps/tag-replacer-go
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
@@ -45,9 +50,11 @@ jobs:
           go-version: '1.21'
 
       - name: Build binary
+        working-directory: apps/tag-replacer-go
         run: |
-          cd apps/tag-replacer-go
-          go build -o tag-replacer-windows.exe .
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go mod tidy
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o tag-replacer-windows.exe .
+          chmod +x tag-replacer-windows.exe.
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
@@ -70,9 +77,11 @@ jobs:
           go-version: '1.21'
 
       - name: Build binary
+        working-directory: apps/tag-replacer-go
         run: |
-          cd apps/tag-replacer-go
-          go build -o tag-replacer-macos .
+            GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go mod tidy
+            GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -o tag-replacer-macos .
+            chmod +x tag-replacer-macos
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
