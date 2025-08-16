@@ -24,7 +24,7 @@ jobs:
         run: |
           GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go mod tidy
           GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o tag-replacer-linux .
-          CHMOD +x tag-replacer-linux
+          chmod +x tag-replacer-linux
 
       - name: List files
         run: ls -la ./apps/tag-replacer-go
