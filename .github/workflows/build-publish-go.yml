@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
+  get-version:
+    uses: ./.github/workflows/extract-version.yml
+
   build-linux:
+    needs: get-version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,10 +28,12 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: apps/tag-replacer-go/tag-replacer-linux
+          tag_name: ${{ needs.get-version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-windows:
+    needs: get-version
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -47,10 +53,12 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: apps/tag-replacer-go/tag-replacer-windows.exe
+          tag_name: ${{ needs.get-version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
 
   build-macos:
+    needs: get-version
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -70,5 +78,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: apps/tag-replacer-go/tag-replacer-macos
+          tag_name: ${{ needs.get-version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
