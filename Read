@@ -1,0 +1,143 @@
+Absolutely, Kester! Here's your updated README with a new section that shows how to run the script using Docker, based on the GitHub Actions setup you shared. I’ve also fixed a few formatting issues (like missing spaces in `python tag-replacer.py--replacer`) to ensure clarity and correctness.
+
+---
+
+# Tag Replacer Script
+
+This script replaces tags in a text file based on a specified replacer. The replacer can be provided in various formats, including JSON, CSV, YAML, or as environment variables.
+
+## Features
+
+- Supports JSON, CSV, YAML, and environment variable formats  
+- Flexible command-line interface using `argparse`  
+- Customizable start and end tags for placeholders  
+- Easy to use for replacing placeholders in text files  
+
+## Requirements
+
+- Python 3.x  
+- PyYAML (for YAML support)  
+
+You can install PyYAML using pip:
+
+```bash
+pip install PyYAML
+```
+
+or
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+---
+
+## Usage (Python)
+
+Run the script using the following command:
+
+```bash
+python tag-replacer.py --replacer <replacer> --type <type> --format <format> --in <input_file> --out <output_file> --start_tag <start_tag> --end_tag <end_tag>
+```
+
+### Arguments
+
+- `--replacer`: The replacer JSON string, CSV file path, YAML file path, or comma-separated environment variable keys  
+- `--type`: Specify if the replacer is a `string`, `file`, or `environment`. Default is `string`  
+- `--format`: Format of the replacer if it's a string. Options are `json`, `yaml`, or `csv`. Default is `json`  
+- `--in`: Input file path containing the text with placeholders  
+- `--out`: Output file path where the modified text will be saved  
+- `--start_tag`: Start tag for placeholders. Default is `{{`  
+- `--end_tag`: End tag for placeholders. Default is `}}`  
+
+---
+
+## 🐳 Usage with Docker
+
+You can run the tag replacer script inside a Docker container using the [mockholm/tag-replacer](https://hub.docker.com/r/mockholm/tag-replacer) image.
+
+### 1. Run with a JSON String
+
+```bash
+docker run --rm -v "$PWD":/work mockholm/tag-replacer \
+  python tag-replacer.py \
+  --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' \
+  --type string --format json \
+  --in /work/input.txt --out /work/output.txt
+```
+
+### 2. Run with a JSON File
+
+```bash
+docker run --rm -v "$PWD":/work mockholm/tag-replacer \
+  python tag-replacer.py \
+  --replacer /work/replacer.json --type file \
+  --in /work/input.txt --out /work/output.txt
+```
+
+### 3. Run with a CSV File
+
+```bash
+docker run --rm -v "$PWD":/work mockholm/tag-replacer \
+  python tag-replacer.py \
+  --replacer /work/replacer.csv --type file \
+  --in /work/input.txt --out /work/output.txt
+```
+
+### 4. Run with a YAML File
+
+```bash
+docker run --rm -v "$PWD":/work mockholm/tag-replacer \
+  python tag-replacer.py \
+  --replacer /work/replacer.yaml --type file \
+  --in /work/input.txt --out /work/output.txt
+```
+
+### 5. Run with Environment Variables
+
+```bash
+docker run --rm -v "$PWD":/work -e NAME="John Doe" -e AGE="30" mockholm/tag-replacer \
+  python tag-replacer.py \
+  --replacer "NAME,AGE" --type environment \
+  --in /work/input.txt --out /work/output.txt
+```
+
+### 6. Run with Custom Tags
+
+```bash
+docker run --rm -v "$PWD":/work mockholm/tag-replacer \
+  python tag-replacer.py \
+  --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' \
+  --type string --format json \
+  --in /work/input.txt --out /work/output.txt \
+  --start_tag "[[" --end_tag "]]"
+```
+
+---
+
+## Input File Example
+
+The input file (`input.txt`) can contain placeholders like this:
+
+```text
+Hello, my name is {{name}} and I am {{age}} years old.
+```
+
+## Output
+
+The output file will contain the replaced values based on the specified replacer:
+
+```text
+Hello, my name is John Doe and I am 30 years old.
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+Let me know if you'd like to add a `Makefile`, a CLI wrapper, or even publish this as a Docker CLI plugin.

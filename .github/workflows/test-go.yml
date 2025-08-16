@@ -1,0 +1,68 @@
+name: Test Tag Replacer Go Binary
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-linux-binary:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Linux Binary from Release
+        uses: robinraju/release-downloader@v1.8
+        with:
+          repository: ${{ github.repository }}
+          tag: latest
+          fileName: tag-replacer-linux
+
+      - name: Make binary executable
+        run: chmod +x tag-replacer-linux
+
+      - name: Create input file
+        run: echo "Hello, my name is {{name}} and I am {{age}} years old." > input.txt
+
+      - name: "Example 1: Using a JSON String"
+        run: |
+          ./tag-replacer-linux --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input.txt --out output.txt
+          cat output.txt
+
+      - name: "Example 2: Using a JSON File"
+        run: |
+          echo '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' > replacer.json
+          ./tag-replacer-linux --replacer replacer.json --type file --in input.txt --out output.txt
+          cat output.txt
+
+      - name: "Example 3: Using a CSV File"
+        run: |
+          echo "key,value" > replacer.csv
+          echo "name,John Doe" >> replacer.csv
+          echo "age,30" >> replacer.csv
+          ./tag-replacer-linux --replacer replacer.csv --type file --in input.txt --out output.txt
+          cat output.txt
+
+      - name: "Example 4: Using a YAML File"
+        run: |
+          echo "replace:" > replacer.yaml
+          echo "  - key: name" >> replacer.yaml
+          echo "    value: John Doe" >> replacer.yaml
+          echo "  - key: age" >> replacer.yaml
+          echo "    value: '30'" >> replacer.yaml
+          ./tag-replacer-linux --replacer replacer.yaml --type file --in input.txt --out output.txt
+          cat output.txt
+
+      - name: "Example 5: Using Environment Variables - setting variables"
+        run: |
+          echo "NAME=John Doe" >> $GITHUB_ENV
+          echo "AGE=30" >> $GITHUB_ENV
+
+      - name: "Example 5: Using Environment Variables"
+        run: |
+          echo "Hello, my name is {{NAME}} and I am {{AGE}} years old." > input-env.txt
+          ./tag-replacer-linux --replacer "NAME,AGE" --type environment --in input-env.txt --out output.txt
+          cat output.txt
+
+      - name: "Example 6: Custom Start and End Tags"
+        run: |
+          echo "Hello, my name is [[name]] and I am [[age]] years old." > input-custom-tag.txt
+          ./tag-replacer-linux --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input-custom-tag.txt --out output.txt --start_tag "[[" --end_tag "]]"
+          cat output.txt
