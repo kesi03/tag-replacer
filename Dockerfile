@@ -15,4 +15,7 @@ COPY tag-replacer.py .
 COPY README.md .
 
 # Keep the container alive by running a shell interactively
-CMD ["tail", "-f", "/dev/null"]
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+CMD ["./entrypoint.sh"]
+
