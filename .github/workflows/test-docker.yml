@@ -10,11 +10,10 @@ jobs:
     services:
       tag-replacer:
         image: mockholm/tag-replacer
-        volumes:
-          - ${{ github.workspace }}:/work  # Mount the GitHub workspace to /work in the container
         options: >-
-          --name tag-replacer-container  # Give the container a fixed name
-
+          --name tag-replacer-container
+        volumes:
+          - ${{ github.workspace }}:/work  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
