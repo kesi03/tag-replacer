@@ -10,10 +10,9 @@ COPY requirements.txt .
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the Python file into the container
+# Copy the Python file and README into the container
 COPY tag-replacer.py .
-
 COPY README.md .
 
-# Set the default command to start a Bash shell
-CMD ["bash"]
+# Keep the container alive by running a shell interactively
+CMD ["tail", "-f", "/dev/null"]
