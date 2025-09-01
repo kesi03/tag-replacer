@@ -1,14 +1,14 @@
-import * as yargs from 'yargs';
-import  ReplaceTagsManager from '../lib/replacer/index';
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
+import ReplaceTagsManager from '../lib/replacer/index';
 import { FormatType, ReplacerType } from '../lib/utils';
 
-// Define the interface for the command-line arguments
 interface Args {
     replacer: string;
     type: ReplacerType;
     format: FormatType;
-    in: string; // Use 'infile' instead of 'in' to avoid conflicts with reserved keywords
-    out: string; // Use 'outfile' instead of 'out' for clarity
+    in: string;
+    out: string;
     start_tag: string;
     end_tag: string;
 }
@@ -16,7 +16,7 @@ interface Args {
 const startTag = '{{';
 const endTag = '}}';
 
-const argv: Args = yargs
+const argv: Args = yargs(hideBin(process.argv))
     .option('replacer', {
         alias: 'r',
         type: 'string',
@@ -59,7 +59,6 @@ const argv: Args = yargs
         describe: `End tag for placeholders (default: "${endTag}")`
     })
     .help()
-    .argv as unknown as Args; // Cast argv to the Args interface
+    .argv as unknown as Args;
 
-// Call the replaceTags method from ReplaceTagsManager with the parsed arguments
 ReplaceTagsManager.replaceTags(argv.replacer, argv.type, argv.format, argv.in, argv.out, argv.start_tag, argv.end_tag);
