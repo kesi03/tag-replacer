@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("tag-replacer-c#")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6e8ef7001af204a99ef3998455e0c6f44dc58ba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3608a6c4a931d99fd99cd1037753abfcd5185fc2")]
 [assembly: System.Reflection.AssemblyProductAttribute("tag-replacer-c#")]
 [assembly: System.Reflection.AssemblyTitleAttribute("tag-replacer-c#")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

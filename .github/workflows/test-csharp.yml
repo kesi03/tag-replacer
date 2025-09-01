@@ -18,34 +18,34 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
 
       - name: Create input file
         run: |
           echo "Hello, my name is {{name}} and I am {{age}} years old." > input.txt
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
 
       - name: "Example 1: Using a JSON String"
         run: |
-          dotnet run --project apps/tag-replacer-c# -- --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input.txt --out output.txt
+          dotnet run --project apps/tag-replacer-c-sharp -- --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input.txt --out output.txt
           cat output.txt
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
 
       - name: "Example 2: Using a JSON File"
         run: |
           echo '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' > replacer.json
-          dotnet run --project apps/tag-replacer-c# -- --replacer replacer.json --type file --in input.txt --out output.txt
+          dotnet run --project apps/tag-replacer-c-sharp -- --replacer replacer.json --type file --in input.txt --out output.txt
           cat output.txt
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
 
       - name: "Example 3: Using a CSV File"
         run: |
           echo "key,value" > replacer.csv
           echo "name,John Doe" >> replacer.csv
           echo "age,30" >> replacer.csv
-          dotnet run --project apps/tag-replacer-c# -- --replacer replacer.csv --type file --in input.txt --out output.txt
+          dotnet run --project apps/tag-replacer-c-sharp -- --replacer replacer.csv --type file --in input.txt --out output.txt
           cat output.txt
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
 
       - name: "Example 4: Using a YAML File"
         run: |
@@ -54,9 +54,9 @@ jobs:
           echo "    value: John Doe" >> replacer.yaml
           echo "  - key: age" >> replacer.yaml
           echo "    value: '30'" >> replacer.yaml
-          dotnet run --project apps/tag-replacer-c# -- --replacer replacer.yaml --type file --in input.txt --out output.txt
+          dotnet run --project apps/tag-replacer-c-sharp -- --replacer replacer.yaml --type file --in input.txt --out output.txt
           cat output.txt
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
 
       - name: "Example 5: Using Environment Variables - setting variables"
         run: |
@@ -66,13 +66,13 @@ jobs:
       - name: "Example 5: Using Environment Variables"
         run: |
           echo "Hello, my name is {{NAME}} and I am {{AGE}} years old." > input-env.txt
-          dotnet run --project apps/tag-replacer-c# -- --replacer "NAME,AGE" --type environment --in input-env.txt --out output.txt
+          dotnet run --project apps/tag-replacer-c-sharp -- --replacer "NAME,AGE" --type environment --in input-env.txt --out output.txt
           cat output.txt
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
 
       - name: "Example 6: Custom Start and End Tags"
         run: |
           echo "Hello, my name is [[name]] and I am [[age]] years old." > input-custom-tag.txt
-          dotnet run --project apps/tag-replacer-c# -- --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input-custom-tag.txt --out output.txt --start_tag "$$\[" --end_tag "$$\]"
+          dotnet run --project apps/tag-replacer-c-sharp -- --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input-custom-tag.txt --out output.txt --start_tag "$$\[" --end_tag "$$\]"
           cat output.txt
-        working-directory: apps/tag-replacer-c#
+        working-directory: apps/tag-replacer-c-sharp
