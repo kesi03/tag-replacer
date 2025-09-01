@@ -78,6 +78,6 @@ jobs:
       - name: "Example 6: Custom Start and End Tags"
         run: |
           echo "Hello, my name is [[name]] and I am [[age]] years old." > input-custom-tag.txt
-          pnpm exec ts-node bin/index.ts --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input-custom-tag.txt --out output.txt --start_tag "$$\[\[" --end_tag "$$\]\]"
+          pnpm exec ts-node bin/index.ts --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input-custom-tag.txt --out output.txt --start_tag "\[\[" --end_tag "\]\]"
           cat output.txt
         working-directory: apps/tag-replacer-node
