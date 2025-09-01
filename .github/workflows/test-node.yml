@@ -15,47 +15,45 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '20'  
-          # Specify the Node.js version you want to use
 
-        # Install pnpm globally
       - name: Install pnpm
         run: |
           npm install -g pnpm   
 
       - name: Install dependencies
         run: |
-          cd apps/tag-replacer-node
           pnpm install  # Use pnpm to install dependencies
+        working-directory: apps/tag-replacer-node
 
       - name: Create input file
         run: |
           echo "Hello, my name is {{name}} and I am {{age}} years old." > input.txt
+        working-directory: apps/tag-replacer-node
 
       - name: "Example 1: Using a JSON String"
         run: |
-          cd apps/tag-replacer-node
           pnpm exec ts-node bin/index.ts --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input.txt --out output.txt
           cat output.txt
+        working-directory: apps/tag-replacer-node
 
       - name: "Example 2: Using a JSON File"
         run: |
-          cd apps/tag-replacer-node
           echo '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' > replacer.json
           pnpm exec ts-node bin/index.ts --replacer replacer.json --type file --in input.txt --out output.txt
           cat output.txt
+        working-directory: apps/tag-replacer-node
 
       - name: "Example 3: Using a CSV File"
         run: |
-          cd apps/tag-replacer-node
           echo "key,value" > replacer.csv
           echo "name,John Doe" >> replacer.csv
           echo "age,30" >> replacer.csv
           pnpm exec ts-node bin/index.ts --replacer replacer.csv --type file --in input.txt --out output.txt
           cat output.txt
+        working-directory: apps/tag-replacer-node
 
       - name: "Example 4: Using a YAML File"
         run: |
-          cd apps/tag-replacer-node
           echo "replace:" > replacer.yaml
           echo "  - key: name" >> replacer.yaml
           echo "    value: John Doe" >> replacer.yaml
@@ -63,6 +61,7 @@ jobs:
           echo "    value: '30'" >> replacer.yaml
           pnpm exec ts-node bin/index.ts --replacer replacer.yaml --type file --in input.txt --out output.txt
           cat output.txt
+        working-directory: apps/tag-replacer-node
 
       - name: "Example 5: Using Environment Variables - setting variables"
         run: |
@@ -71,14 +70,14 @@ jobs:
 
       - name: "Example 5: Using Environment Variables"
         run: |
-          cd apps/tag-replacer-node
           echo "Hello, my name is {{NAME}} and I am {{AGE}} years old." > input-env.txt
           pnpm exec ts-node bin/index.ts --replacer "NAME,AGE" --type environment --in input-env.txt --out output.txt
           cat output.txt
+        working-directory: apps/tag-replacer-node
 
       - name: "Example 6: Custom Start and End Tags"
         run: |
-          cd apps/tag-replacer-node
           echo "Hello, my name is [[name]] and I am [[age]] years old." > input-custom-tag.txt
           pnpm exec ts-node bin/index.ts --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input-custom-tag.txt --out output.txt --start_tag "[[" --end_tag "]]"
           cat output.txt
+        working-directory: apps/tag-replacer-node
