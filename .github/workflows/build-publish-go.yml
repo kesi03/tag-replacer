@@ -3,6 +3,9 @@ name: Build and Release Go Binary
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   get-version:
     uses: ./.github/workflows/extract-version.yml
