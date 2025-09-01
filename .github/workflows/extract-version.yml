@@ -2,9 +2,15 @@ name: Extract Version
 
 on:
   workflow_call:
+    inputs:
+      custom_version:
+        description: "Custom version to use instead of 'latest'"
+        required: false
+        type: string
+        default: "latest"  # Default value if not provided
     outputs:
       version:
-        description: "Extracted version from tag or 'latest'"
+        description: "Extracted version from tag or custom version"
         value: ${{ jobs.extract-version.outputs.version }}
 
 jobs:
@@ -13,11 +19,11 @@ jobs:
     outputs:
       version: ${{ steps.set-version.outputs.version }}
     steps:
-      - name: Set version from tag
+      - name: Set version from tag or custom input
         id: set-version
         run: |
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           else
-            echo "version=latest" >> $GITHUB_OUTPUT
+            echo "version=${{ inputs.custom_version }}" >> $GITHUB_OUTPUT
           fi

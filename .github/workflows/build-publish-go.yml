@@ -2,6 +2,11 @@ name: Build and Release Go Binary
 
 on:
   workflow_dispatch:
+    inputs:
+      custom_version:
+        description: "Custom version to use instead of 'latest'"
+        required: false
+        default: "latest"  # Default value if not provided
 
 permissions:
   contents: write
@@ -9,6 +14,8 @@ permissions:
 jobs:
   get-version:
     uses: ./.github/workflows/extract-version.yml
+    with:
+      custom_version: ${{ github.event.inputs.custom_version }}  # Pass the custom version to extract-version
 
   build-linux:
     needs: get-version
@@ -55,8 +62,8 @@ jobs:
       - name: Build binary
         working-directory: apps/tag-replacer-go
         run: |
-         go mod tidy
-         go build -o tag-replacer-windows.exe .
+          go mod tidy
+          go build -o tag-replacer-windows.exe .
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
