@@ -1,4 +1,4 @@
-name: Tag Replacer Script Examples
+name: Tag Replacer Node Examples
 
 on:
   workflow_dispatch:
