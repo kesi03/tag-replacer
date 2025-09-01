@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "4XpMbGpk4tQ=",
+  "success": true,
+  "projectFilePath": "/workspaces/tag-replacer/apps/tag-replacer-c#/tag-replacer-c#.csproj",
+  "expectedPackageFiles": [
+    "/home/codespace/.nuget/packages/commandlineparser/2.9.1/commandlineparser.2.9.1.nupkg.sha512",
+    "/home/codespace/.nuget/packages/yamldotnet/16.3.0/yamldotnet.16.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}
