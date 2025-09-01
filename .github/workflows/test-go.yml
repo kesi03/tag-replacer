@@ -2,6 +2,12 @@ name: Test Tag Replacer Go Binary
 
 on:
   workflow_dispatch:
+    inputs:
+      custom_version:
+        description: "Custom version to use instead of 'latest'"
+        required: false
+        default: "0.0.1"  # Default value if not provided
+
 
 jobs:
   test-linux-binary:
@@ -12,7 +18,7 @@ jobs:
         uses: robinraju/release-downloader@v1.8
         with:
           repository: ${{ github.repository }}
-          tag: latest
+          tag:  ${{ github.event.inputs.custom_version }} 
           fileName: tag-replacer-linux
 
       - name: Make binary executable
