@@ -56,7 +56,12 @@ Replace tags using a JSON string directly:
 #### 🐍 Python
 
 ```bash
-python tag-replacer.py--replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input.txt --out output.txt
+python tag-replacer.py \
+--replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' \
+--type string \
+--format json \
+--in input.txt \
+--out output.txt
 ```
 
 #### 🐳 Docker
@@ -77,7 +82,11 @@ Replace tags using a JSON file:
 #### 🐍 Python
 
 ```bash
-python tag-replacer.py--replacer replacer.json --type file --in input.txt --out output.txt
+python tag-replacer.py \
+--replacer replacer.json \
+--type file \
+--in input.txt \
+--out output.txt
 ```
 
 #### 🐳 Docker
@@ -106,7 +115,11 @@ Run the script:
 #### 🐍 Python
 
 ```bash
-python tag-replacer.py --replacer replacer.csv --type file --in input.txt --out output.txt
+python tag-replacer.py \
+--replacer replacer.csv \
+--type file \
+--in input.txt \
+--out output.txt
 ```
 
 #### 🐳 Docker
@@ -135,7 +148,11 @@ Run the script:
 #### 🐍 Python
 
 ```bash
-python tag-replacer.py --replacer replacer.yaml --type file --in input.txt --out output.txt
+python tag-replacer.py \
+--replacer replacer.yaml \
+--type file \
+--in input.txt \
+--out output.txt
 ```
 #### 🐳 Docker
 
@@ -160,7 +177,11 @@ Run the script with environment variable keys:
 #### 🐍 Python
 
 ```bash
-python tag-replacer.py --replacer "NAME,AGE" --type environment --in input.txt --out output.txt
+python tag-replacer.py \
+--replacer "NAME,AGE" \
+--type environment \
+--in input.txt \
+--out output.txt
 ```
 #### 🐳 Docker
 
@@ -178,7 +199,14 @@ You can customize the start and end tags for placeholders. For example, if you w
 #### 🐍 Python
 
 ```bash
-python tag-replacer.py --replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' --type string --format json --in input.txt --out output.txt --start_tag "[[" --end_tag "]]"
+python tag-replacer.py \
+--replacer '{"replace":[{"key":"name","value":"John Doe"},{"key":"age","value":"30"}]}' \
+--type string \
+--format json \
+--in input.txt \
+--out output.txt \
+--start_tag "[[" \
+--end_tag "]]"
 ```
 
 #### 🐳 Docker
