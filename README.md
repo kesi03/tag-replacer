@@ -34,7 +34,14 @@ You can run the tag replacer script inside a Docker container using the [mockhol
 Run the script using the following command:
 
 ```bash
-python tag-replacer.py--replacer <replacer> --type <type> --format <format> --in <input_file> --out <output_file> --start_tag <start_tag> --end_tag <end_tag>
+python tag-replacer.py \
+--replacer <replacer> \
+--type <type> \
+--format <format> \
+--in <input_file> \
+--out <output_file> \
+--start_tag <start_tag> \
+--end_tag <end_tag>
 ```
 
 ### Arguments
